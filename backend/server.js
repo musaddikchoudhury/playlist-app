@@ -4,7 +4,13 @@ const { Playlist, Song } = require('./models');
 
 const app = express();
 
-app.use(cors()); 
+const cors = require('cors');
+
+app.use(cors({
+  origin: 'https://playlist-app-taupe-eta.vercel.app', 
+  credentials: true 
+}));
+
 app.use(express.json());
 
 app.get('/playlists', async (req, res) => {
