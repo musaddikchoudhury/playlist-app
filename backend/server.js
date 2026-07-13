@@ -116,6 +116,14 @@ app.put('/playlists/:id', async (req, res) => {
   }
 });
 
+Playlist.sync({ alter: true }).then(() => {
+  console.log("Playlists table created/updated!");
+});
+
+Song.sync({ alter: true }).then(() => {
+  console.log("Songs table created/updated!");
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
