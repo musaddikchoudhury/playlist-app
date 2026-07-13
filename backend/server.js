@@ -1,10 +1,8 @@
 const express = require('express');
-const cors = require('cors');
+const cors = require('cors'); // Declared only once!
 const { Playlist, Song } = require('./models');
 
 const app = express();
-
-const cors = require('cors');
 
 app.use(cors({
   origin: 'https://playlist-app-taupe-eta.vercel.app', 
@@ -118,7 +116,7 @@ app.put('/playlists/:id', async (req, res) => {
   }
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
