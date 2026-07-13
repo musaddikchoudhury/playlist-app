@@ -19,7 +19,7 @@ export default function PlaylistDetail() {
   useEffect(() => {
     async function fetchPlaylist() {
       try {
-        const response = await fetch(`http://localhost:3000/playlists/${id}`);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/playlists/${id}`);
         if (!response.ok) throw new Error('Failed to fetch');
         
         const data = await response.json();
@@ -39,7 +39,7 @@ export default function PlaylistDetail() {
   const handleUpdatePlaylist = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:3000/playlists/${id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/playlists/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: editName, description: editDescription })
@@ -59,7 +59,8 @@ export default function PlaylistDetail() {
   const handleDeletePlaylist = async () => {
     if (!window.confirm("Are you sure you want to delete this entire playlist?")) return;
     try {
-      const response = await fetch(`http://localhost:3000/playlists/${id}`, { method: 'DELETE' });
+      // UPDATED FETCH URL
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/playlists/${id}`, { method: 'DELETE' });
       if (!response.ok) throw new Error('Failed to delete playlist');
       navigate('/');
     } catch (error) {
@@ -70,7 +71,7 @@ export default function PlaylistDetail() {
   const handleAddSong = async (e) => {
     e.preventDefault(); 
     try {
-      const response = await fetch(`http://localhost:3000/playlists/${id}/songs`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/playlists/${id}/songs`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, artist, duration: parseInt(duration, 10) })
@@ -86,7 +87,7 @@ export default function PlaylistDetail() {
 
   const handleDeleteSong = async (songId) => {
     try {
-      const response = await fetch(`http://localhost:3000/songs/${songId}`, { method: 'DELETE' });
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/songs/${songId}`, { method: 'DELETE' });
       if (!response.ok) throw new Error('Failed to delete song');
       setPlaylist({ ...playlist, Songs: playlist.Songs.filter((song) => song.id !== songId) });
     } catch (error) {

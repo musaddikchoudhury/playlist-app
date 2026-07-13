@@ -12,7 +12,7 @@ export default function PlaylistList() {
   useEffect(() => {
     async function fetchPlaylists() {
       try {
-        const response = await fetch('http://localhost:3000/playlists');
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/playlists`)
         if (!response.ok) throw new Error('Failed to fetch');
         
         const data = await response.json();
@@ -31,7 +31,7 @@ export default function PlaylistList() {
   const handleCreatePlaylist = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3000/playlists', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/playlists`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, description })
@@ -43,7 +43,6 @@ export default function PlaylistList() {
       
       setPlaylists([...playlists, newPlaylist]);
       
-   
       setName('');
       setDescription('');
     } catch (error) {
