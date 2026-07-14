@@ -7,9 +7,6 @@ export default function PlaylistList() {
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [searchPlaylist, setsearchPlaylist] = useState('');
-
-  
 
   useEffect(() => {
     async function fetchPlaylists() {
@@ -18,7 +15,16 @@ export default function PlaylistList() {
         if (!response.ok) throw new Error('Failed to fetch');
         
         const data = await response.json();
-        setPlaylists(data);
+        console.log("Fetched playlists:", data); // Helpful for checking your API data
+        
+        // Safely set the playlists array
+        if (Array.isArray(data)) {
+          setPlaylists(data);
+        } else if (data && Array.isArray(data.data)) {
+          setPlaylists(data.data);
+        } else {
+          setPlaylists([]);
+        }
       } catch (error) {
         console.error('Error fetching playlists:', error);
       } finally {
@@ -40,9 +46,12 @@ export default function PlaylistList() {
 
       if (!response.ok) throw new Error('Failed to create playlist');
       
-      const newPlaylist = await response.json();
+      const newPlaylistResponse = await response.json();
       
-      setPlaylists([...playlists, newPlaylist]);
+      // Extract the actual playlist object in case the API wrapped it
+      const actualPlaylist = newPlaylistResponse.playlist || newPlaylistResponse.data || newPlaylistResponse;
+      
+      setPlaylists([...playlists, actualPlaylist]);
       
       setName('');
       setDescription('');
@@ -50,10 +59,6 @@ export default function PlaylistList() {
       console.error('Error creating playlist:', error);
     }
   };
-
-  const FilteredPlaylists = playlists.filter((playlist) =>
-    playlist.name.toLowerCase().includes(searchPlaylist.toLowerCase())
-  );
 
   if (isLoading) return <p>Loading playlists...</p>;
 
@@ -68,27 +73,21 @@ export default function PlaylistList() {
         <button type="submit">Create</button>
       </form>
 
-      <input 
-        type="text" 
-        placeholder="Search playlists..." 
-        value={searchPlaylist} 
-        onChange={(e) => setsearchPlaylist(e.target.value)} 
-        style={{ marginBottom: '20px', padding: '8px', width: '100%', maxWidth: '400px' }}
-      />
-      
       <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-        {FilteredPlaylists.length === 0 ? (
+        {playlists.length === 0 ? (
           <p>No playlists found!</p>
         ) : (
-          FilteredPlaylists.map((playlist) => (
-            <div key={playlist.id} className="card flex-between">
+          playlists.map((playlist, index) => (
+            <div key={playlist?.id || index} className="card flex-between">
               <div>
-                <h3>{playlist.name}</h3>
-                <p>{playlist.description}</p>
+                <h3>{playlist?.name || 'Unnamed Playlist'}</h3>
+                <p>{playlist?.description || 'No description'}</p>
               </div>
-              <Link to={`/playlists/${playlist.id}`}>
-                <button className="secondary-btn">View Songs</button>
-              </Link>
+              {playlist?.id && (
+                <Link to={`/playlists/${playlist.id}`}>
+                  <button className="secondary-btn">View Songs</button>
+                </Link>
+              )}
             </div>
           ))
         )}
