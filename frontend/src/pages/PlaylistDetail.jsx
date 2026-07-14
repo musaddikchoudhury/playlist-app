@@ -13,7 +13,6 @@ export default function PlaylistDetail() {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState('');
   const [editDescription, setEditDescription] = useState('');
-   const [searchSong, setsearchSong] = useState('');
 
   const navigate = useNavigate();
 
@@ -78,7 +77,10 @@ export default function PlaylistDetail() {
       });
       if (!response.ok) throw new Error('Failed to add song');
       const newSong = await response.json();
-      setPlaylist({ ...playlist, Songs: [...playlist.Songs, newSong] });
+      
+      // Ensure we append to an array even if playlist.Songs is initially undefined
+      setPlaylist({ ...playlist, Songs: [...(playlist.Songs || []), newSong] });
+      
       setTitle(''); setArtist(''); setDuration('');
     } catch (error) {
       console.error('Error adding song:', error);
@@ -104,7 +106,7 @@ export default function PlaylistDetail() {
   if (isLoading) return <p>Loading playlist...</p>;
   if (!playlist) return <p>Playlist not found.</p>;
 
- return (
+  return (
     <div>
       <Link to="/"><button className="secondary-btn" style={{ marginBottom: '30px' }}>Back to Playlists</button></Link>
       
@@ -135,20 +137,14 @@ export default function PlaylistDetail() {
         <div style={{ flex: 2 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
             <h3 style={{ margin: 0 }}>Songs</h3>
-            <input 
-              type="text" 
-              placeholder="Search songs..." 
-              value={searchSong} 
-              onChange={(e) => setSearchSong(e.target.value)} 
-              style={{ padding: '8px', width: '200px' }}
-            />
           </div>
 
-          {filteredSongs.length === 0 ? (
+          {/* Safely check if Songs array exists and has length */}
+          {(!playlist.Songs || playlist.Songs.length === 0) ? (
             <p>No songs found!</p>
           ) : (
             <ul className="song-list">
-              {filteredSongs.map((song) => (
+              {playlist.Songs.map((song) => (
                 <li key={song.id} className="song-item">
                   <div>
                     <strong style={{ fontSize: '1.1rem' }}>{song.title}</strong> <br/>
