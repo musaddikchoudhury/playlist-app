@@ -2,19 +2,19 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function PlaylistList() {
-
   const [playlists, setPlaylists] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const [name, setName] = useState('');
-  const [searchPlaylist, setsearchPlaylist] = useState('');
   const [description, setDescription] = useState('');
-  const [filteredPlaylists, setfilteredPlaylists] = useState([]);
+  const [searchPlaylist, setsearchPlaylist] = useState('');
+
+  
 
   useEffect(() => {
     async function fetchPlaylists() {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/playlists`)
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/playlists`);
         if (!response.ok) throw new Error('Failed to fetch');
         
         const data = await response.json();
@@ -28,7 +28,6 @@ export default function PlaylistList() {
 
     fetchPlaylists();
   }, []);
-
 
   const handleCreatePlaylist = async (e) => {
     e.preventDefault();
@@ -52,9 +51,13 @@ export default function PlaylistList() {
     }
   };
 
+  const FilteredPlaylists = playlists.filter((playlist) =>
+    playlist.name.toLowerCase().includes(searchPlaylist.toLowerCase())
+  );
+
   if (isLoading) return <p>Loading playlists...</p>;
 
- return (
+  return (
     <div>
       <h2>All Playlists</h2>
       
@@ -74,10 +77,10 @@ export default function PlaylistList() {
       />
       
       <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-        {filteredPlaylists.length === 0 ? (
+        {FilteredPlaylists.length === 0 ? (
           <p>No playlists found!</p>
         ) : (
-          filteredPlaylists.map((playlist) => (
+          FilteredPlaylists.map((playlist) => (
             <div key={playlist.id} className="card flex-between">
               <div>
                 <h3>{playlist.name}</h3>
@@ -91,4 +94,5 @@ export default function PlaylistList() {
         )}
       </div>
     </div>
-  )};
+  );
+}
