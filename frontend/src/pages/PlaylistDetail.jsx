@@ -77,8 +77,7 @@ export default function PlaylistDetail() {
       });
       if (!response.ok) throw new Error('Failed to add song');
       const newSong = await response.json();
-      
-      // Ensure we append to an array even if playlist.Songs is initially undefined
+    
       setPlaylist({ ...playlist, Songs: [...(playlist.Songs || []), newSong] });
       
       setTitle(''); setArtist(''); setDuration('');
@@ -139,7 +138,6 @@ export default function PlaylistDetail() {
             <h3 style={{ margin: 0 }}>Songs</h3>
           </div>
 
-          {/* Safely check if Songs array exists and has length */}
           {(!playlist.Songs || playlist.Songs.length === 0) ? (
             <p>No songs found!</p>
           ) : (
