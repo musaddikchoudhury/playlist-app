@@ -47,7 +47,6 @@ export default function PlaylistList() {
       
       const newPlaylistResponse = await response.json();
       
-      // Extract the actual playlist object in case the API wrapped it
       const actualPlaylist = newPlaylistResponse.playlist || newPlaylistResponse.data || newPlaylistResponse;
       
       setPlaylists([...playlists, actualPlaylist]);
