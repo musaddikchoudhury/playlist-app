@@ -1,9 +1,13 @@
 const { Sequelize } = require('sequelize');
 
-const db = new Sequelize('playlist_db', 'postgres', 'taskapi123', {
-  host: 'localhost',
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: 'postgres',
-  logging: false, 
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
+  }
 });
 
-module.exports = db;
+module.exports = sequelize;
