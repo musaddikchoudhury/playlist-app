@@ -1,13 +1,10 @@
 const express = require('express');
-const cors = require('cors'); // Declared only once!
+const cors = require('cors'); 
 const { Playlist, Song } = require('./models');
 
 const app = express();
 
-app.use(cors({
-  origin: 'https://playlist-app-taupe-eta.vercel.app', 
-  credentials: true 
-}));
+app.use(cors());
 
 app.use(express.json());
 
