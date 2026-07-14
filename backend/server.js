@@ -113,13 +113,17 @@ app.put('/playlists/:id', async (req, res) => {
   }
 });
 
-Playlist.sync({ alter: true }).then(() => {
-  console.log("Playlists table created/updated!");
-});
-
-Song.sync({ alter: true }).then(() => {
-  console.log("Songs table created/updated!");
-});
+Playlist.sync({ alter: true })
+  .then(() => {
+    console.log("Playlists table created/updated!");
+    return Song.sync({ alter: true }); 
+  })
+  .then(() => {
+    console.log("Songs table created/updated!");
+  })
+  .catch((err) => {
+    console.error("Database sync error:", err);
+  });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
