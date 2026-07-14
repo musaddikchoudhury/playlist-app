@@ -9,6 +9,7 @@ export default function PlaylistList() {
   const [name, setName] = useState('');
   const [searchPlaylist, setsearchPlaylist] = useState('');
   const [description, setDescription] = useState('');
+  const [filteredPlaylists, setfilteredPlaylists] = useState([]);
 
   useEffect(() => {
     async function fetchPlaylists() {
