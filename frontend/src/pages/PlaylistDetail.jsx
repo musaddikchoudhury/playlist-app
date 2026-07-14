@@ -59,7 +59,6 @@ export default function PlaylistDetail() {
   const handleDeletePlaylist = async () => {
     if (!window.confirm("Are you sure you want to delete this entire playlist?")) return;
     try {
-      // UPDATED FETCH URL
       const response = await fetch(`${import.meta.env.VITE_API_URL}/playlists/${id}`, { method: 'DELETE' });
       if (!response.ok) throw new Error('Failed to delete playlist');
       navigate('/');
@@ -106,7 +105,7 @@ export default function PlaylistDetail() {
 
  return (
     <div>
-      <Link to="/"><button className="secondary-btn" style={{ marginBottom: '30px' }}>⬅ Back to Playlists</button></Link>
+      <Link to="/"><button className="secondary-btn" style={{ marginBottom: '30px' }}>Back to Playlists</button></Link>
       
       <div className="flex-between" style={{ alignItems: 'flex-start', marginBottom: '20px' }}>
         {isEditing ? (
