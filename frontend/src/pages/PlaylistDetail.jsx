@@ -175,4 +175,5 @@ export default function PlaylistDetail() {
         </div>
       </div>
     </div>
-  )};
+  );
+}
