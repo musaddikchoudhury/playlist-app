@@ -13,6 +13,7 @@ export default function PlaylistDetail() {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState('');
   const [editDescription, setEditDescription] = useState('');
+   const [searchSong, setsearchSong] = useState('');
 
   const navigate = useNavigate();
 
@@ -59,7 +60,6 @@ export default function PlaylistDetail() {
   const handleDeletePlaylist = async () => {
     if (!window.confirm("Are you sure you want to delete this entire playlist?")) return;
     try {
-      // UPDATED FETCH URL
       const response = await fetch(`${import.meta.env.VITE_API_URL}/playlists/${id}`, { method: 'DELETE' });
       if (!response.ok) throw new Error('Failed to delete playlist');
       navigate('/');
@@ -106,7 +106,7 @@ export default function PlaylistDetail() {
 
  return (
     <div>
-      <Link to="/"><button className="secondary-btn" style={{ marginBottom: '30px' }}>⬅ Back to Playlists</button></Link>
+      <Link to="/"><button className="secondary-btn" style={{ marginBottom: '30px' }}>Back to Playlists</button></Link>
       
       <div className="flex-between" style={{ alignItems: 'flex-start', marginBottom: '20px' }}>
         {isEditing ? (
@@ -133,12 +133,22 @@ export default function PlaylistDetail() {
       
       <div style={{ display: 'flex', gap: '40px', marginTop: '40px' }}>
         <div style={{ flex: 2 }}>
-          <h3>Songs</h3>
-          {playlist.Songs && playlist.Songs.length === 0 ? (
-            <p>No songs yet. Add one!</p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+            <h3 style={{ margin: 0 }}>Songs</h3>
+            <input 
+              type="text" 
+              placeholder="Search songs..." 
+              value={searchSong} 
+              onChange={(e) => setSearchSong(e.target.value)} 
+              style={{ padding: '8px', width: '200px' }}
+            />
+          </div>
+
+          {filteredSongs.length === 0 ? (
+            <p>No songs found!</p>
           ) : (
             <ul className="song-list">
-              {playlist.Songs.map((song) => (
+              {filteredSongs.map((song) => (
                 <li key={song.id} className="song-item">
                   <div>
                     <strong style={{ fontSize: '1.1rem' }}>{song.title}</strong> <br/>
@@ -165,5 +175,4 @@ export default function PlaylistDetail() {
         </div>
       </div>
     </div>
-  );
-}
+  )};

@@ -7,6 +7,7 @@ export default function PlaylistList() {
   const [isLoading, setIsLoading] = useState(true);
 
   const [name, setName] = useState('');
+  const [searchPlaylist, setsearchPlaylist] = useState('');
   const [description, setDescription] = useState('');
 
   useEffect(() => {
@@ -52,7 +53,7 @@ export default function PlaylistList() {
 
   if (isLoading) return <p>Loading playlists...</p>;
 
-  return (
+ return (
     <div>
       <h2>All Playlists</h2>
       
@@ -62,12 +63,20 @@ export default function PlaylistList() {
         <input type="text" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
         <button type="submit">Create</button>
       </form>
+
+      <input 
+        type="text" 
+        placeholder="Search playlists..." 
+        value={searchPlaylist} 
+        onChange={(e) => setsearchPlaylist(e.target.value)} 
+        style={{ marginBottom: '20px', padding: '8px', width: '100%', maxWidth: '400px' }}
+      />
       
       <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-        {playlists.length === 0 ? (
-          <p>No playlists yet. Create one!</p>
+        {filteredPlaylists.length === 0 ? (
+          <p>No playlists found!</p>
         ) : (
-          playlists.map((playlist) => (
+          filteredPlaylists.map((playlist) => (
             <div key={playlist.id} className="card flex-between">
               <div>
                 <h3>{playlist.name}</h3>
@@ -81,5 +90,4 @@ export default function PlaylistList() {
         )}
       </div>
     </div>
-  );
-}
+  )};
