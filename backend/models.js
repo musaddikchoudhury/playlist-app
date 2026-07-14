@@ -21,7 +21,7 @@ const Song = db.define('Song', {
     allowNull: false
   },
   duration: {
-    type: DataTypes.INTEGER, // Storing as total seconds, per the spec!
+    type: DataTypes.INTEGER,
     allowNull: false
   }
 });
