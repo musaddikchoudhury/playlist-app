@@ -15,9 +15,8 @@ export default function PlaylistList() {
         if (!response.ok) throw new Error('Failed to fetch');
         
         const data = await response.json();
-        console.log("Fetched playlists:", data); // Helpful for checking your API data
+        console.log("Fetched playlists:", data)
         
-        // Safely set the playlists array
         if (Array.isArray(data)) {
           setPlaylists(data);
         } else if (data && Array.isArray(data.data)) {
